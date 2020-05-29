@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>login</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item>
+    <ion-label position="floating">Account:</ion-label>
+    <ion-input type="text" [(ngModel)]="account"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="floating">Password:</ion-label>
+    <ion-input type="password" [(ngModel)]="password"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-checkbox [(ngModel)]="checked"></ion-checkbox><ion-text>Keep Login</ion-text>
+  </ion-item>
+  <ion-item lines="none">
+    <ion-button (click)="onClick()">login</ion-button>
+  </ion-item>
+</ion-content>

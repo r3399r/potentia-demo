@@ -1,0 +1,11 @@
+{
+  "extends": [
+    "stylelint-config-recommended-scss",
+    "stylelint-config-sass-guidelines"
+  ],
+  "rules": {
+    "no-empty-source": null,
+    "selector-type-no-unknown": null,
+    "selector-max-id": null
+  }
+}
