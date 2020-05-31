@@ -6,10 +6,12 @@ import { LoginResponse } from 'src/app/model/LoginResponse';
 export class AuthService {
   private readonly http: HttpClient;
   private keepAlive: string | null
+  private logined:string|null
 
   constructor(http: HttpClient) {
     this.http = http;
     this.keepAlive = localStorage.getItem('keep_alive')
+    this.logined = sessionStorage.getItem('login')
   }
 
   public async isAuth(): Promise<boolean> {
@@ -18,20 +20,28 @@ export class AuthService {
     // const accessToken: string | null = sessionStorage.getItem('access_token')
     // const refreshableUntil: number = Number(sessionStorage.getItem('refreshable_until'))
 
+    if (this.keepAlive==='true'){
+      console.log('is keepAlive')
+      try {
+        console.log('refresh')
+        await this.refreshToken(loginResponse.token)
+        return true;
+      } catch{
+        console.log('server error')
+        return false
+      }
+      // return false
+    }
+    if (this.logined!=='true'){
+      console.log('first login')
+      return false
+    }
     if (loginResponse.token === '') {
       console.log('null storage')
       return false
     }
     if (loginResponse.refreshable_until < Date.now()) {
       console.log('cannot refresh')
-      return false
-    }
-    try {
-      console.log('refresh')
-      await this.refreshToken(loginResponse.token)
-      return true;
-    } catch{
-      console.log('server error')
       return false
     }
   }
@@ -60,11 +70,12 @@ export class AuthService {
 
   private saveDataStorage(loginResponse: LoginResponse, keepAlive?: boolean) {
     if (keepAlive === true) {
-      localStorage.setItem('keep_alive', '1');
+      localStorage.setItem('keep_alive', 'true');
     } else if (keepAlive === false) {
       localStorage.removeItem('keep_alive');
     }
 
+    sessionStorage.setItem('login', 'true');
     localStorage.setItem('access_token', loginResponse.token);
     localStorage.setItem('accessible_until', String(loginResponse.accessible_until));
     localStorage.setItem('refreshable_until', String(loginResponse.refreshable_until));
