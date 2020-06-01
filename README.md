@@ -17,4 +17,4 @@ This repository is for the interview assignment of front-end work of Potential.
 
 We can run `npm run deploy` to publish the compiled result to s3 and we can check it online. Note that this step need the user to configure `aws configure` with specific IAM account.
 
-Try it: http://y-potentia-demo.s3-website-ap-northeast-1.amazonaws.com/user
+Try it: http://y-potentia-demo.s3-website-ap-northeast-1.amazonaws.com
