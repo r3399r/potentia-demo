@@ -5,11 +5,21 @@ describe('SplitPaneService', () => {
   let service: SplitPaneService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      providers: [
+        SplitPaneService
+      ],
+    });
     service = TestBed.inject(SplitPaneService);
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
+  });
+
+  it('setDisable should work', () => {
+    service.setDisable(false)
+    // tslint:disable-next-line: no-string-literal
+    expect(service['disable']).toBe(false)
   });
 });

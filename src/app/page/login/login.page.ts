@@ -37,7 +37,7 @@ export class LoginPage implements OnInit {
       await this.authService.login(this.account, this.password, this.checked)
       this.router.navigate(['/user']);
       this.splitPaneService.setDisable(false);
-    } catch{
+    } catch {
       const alert = await this.alertController.create({
         message: 'Wrong account or password.',
         buttons: ['OK']

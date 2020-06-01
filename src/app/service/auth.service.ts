@@ -5,49 +5,37 @@ import { LoginResponse } from 'src/app/model/LoginResponse';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly http: HttpClient;
-  private keepAlive: string | null
-  private logined:string|null
 
   constructor(http: HttpClient) {
     this.http = http;
-    this.keepAlive = localStorage.getItem('keep_alive')
-    this.logined = sessionStorage.getItem('login')
   }
 
   public async isAuth(): Promise<boolean> {
-
     const loginResponse: LoginResponse = this.getDataStorage();
-    // const accessToken: string | null = sessionStorage.getItem('access_token')
-    // const refreshableUntil: number = Number(sessionStorage.getItem('refreshable_until'))
+    const keepAlive: string | null = localStorage.getItem('keep_alive')
+    const logined: string | null = sessionStorage.getItem('logined')
 
-    if (this.keepAlive==='true'){
-      console.log('is keepAlive')
-      try {
-        console.log('refresh')
-        await this.refreshToken(loginResponse.token)
-        return true;
-      } catch{
-        console.log('server error')
-        return false
-      }
-      // return false
-    }
-    if (this.logined!=='true'){
-      console.log('first login')
+    if (loginResponse.token === 'null') {
       return false
     }
-    if (loginResponse.token === '') {
-      console.log('null storage')
+    if (keepAlive !== 'true' && logined !== 'true') {
       return false
     }
     if (loginResponse.refreshable_until < Date.now()) {
-      console.log('cannot refresh')
+      console.log('idle too long')
+      return false
+    }
+    try {
+      console.log('refresh')
+      await this.refreshToken(loginResponse.token)
+      return true;
+    } catch{
+      console.log('server error')
       return false
     }
   }
 
   public async login(account: string, password: string, keepAlive: boolean): Promise<void> {
-    // this.useLocalStorage = checked
     const loginResponse: LoginResponse = await this.http.post<LoginResponse>(
       'https://api-test.potentia.tech/api/login',
       {
@@ -59,7 +47,7 @@ export class AuthService {
     this.saveDataStorage(loginResponse, keepAlive)
   }
 
-  private async refreshToken(accessToken: string): Promise<any> {
+  public async refreshToken(accessToken: string): Promise<void> {
     const refreshResponse: LoginResponse = await this.http.post<LoginResponse>(
       'https://api-test.potentia.tech/api/refresh',
       {},
@@ -75,32 +63,17 @@ export class AuthService {
       localStorage.removeItem('keep_alive');
     }
 
-    sessionStorage.setItem('login', 'true');
+    sessionStorage.setItem('logined', 'true');
     localStorage.setItem('access_token', loginResponse.token);
     localStorage.setItem('accessible_until', String(loginResponse.accessible_until));
     localStorage.setItem('refreshable_until', String(loginResponse.refreshable_until));
-    //   } else {
-    //   sessionStorage.setItem('access_token', loginResponse.token);
-    //   sessionStorage.setItem('accessible_until', String(loginResponse.accessible_until));
-    //   sessionStorage.setItem('refreshable_until', String(loginResponse.refreshable_until));
-    // }
   }
 
   private getDataStorage(): LoginResponse {
-    // if (localStorage.getItem('use_local_storage') !== null) {
-    //   this.useLocalStorage = true
     return {
       token: String(localStorage.getItem('access_token')),
       accessible_until: Number(localStorage.getItem('accessible_until')),
       refreshable_until: Number(localStorage.getItem('refreshable_until'))
     }
-    // } else {
-    //   this.useLocalStorage = false
-    //   return {
-    //     token: String(sessionStorage.getItem('access_token')),
-    //     accessible_until: Number(sessionStorage.getItem('accessible_until')),
-    //     refreshable_until: Number(sessionStorage.getItem('refreshable_until'))
-    //   }
-    // }
   }
 }

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { User } from 'src/app/model/User';
+import { UserService } from 'src/app/service/user.service';
 
 @Component({
   selector: 'app-user',
@@ -6,10 +8,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./user.page.scss'],
 })
 export class UserPage implements OnInit {
+  private userService: UserService;
+  public user: User = { account: '', name: '' }
 
-  constructor() { }
+  constructor(userService: UserService) {
+    this.userService = userService
+  }
 
-  ngOnInit() {
+  async ngOnInit() {
+    this.user = await this.userService.getUser()
   }
 
 }

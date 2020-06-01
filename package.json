@@ -2,6 +2,7 @@
   "name": "potentia-demo",
   "version": "0.0.1",
   "author": "Yue Chang",
+  "description": "interview assignment of Potentia",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -19,7 +20,7 @@
     "fix:format": "npm run lint:format -- --write",
     "fix": "run-s fix:*",
     "pre:dev": "run-s clean fix build test:coverage",
-    "deploy": "npm run build && aws s3 sync ./www s3://yue-static-test --size-only"
+    "deploy": "npm run build && aws s3 sync ./www s3://y-potentia-demo --size-only"
   },
   "private": true,
   "dependencies": {
@@ -70,6 +71,5 @@
     "ts-node": "~8.3.0",
     "tslint": "~6.1.0",
     "typescript": "~3.8.3"
-  },
-  "description": "An Ionic project"
+  }
 }
