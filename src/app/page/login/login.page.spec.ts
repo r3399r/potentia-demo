@@ -1,9 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
 import { LoginPage } from 'src/app/page/login/login.page';
-import { RouterTestingModule } from '@angular/router/testing';
-import { SplitPaneService } from 'src/app/service/split-pane.service';
 import { AuthService } from 'src/app/service/auth.service';
+import { SplitPaneService } from 'src/app/service/split-pane.service';
 
 describe('LoginPage', () => {
   let authServiceSpy: jasmine.SpyObj<AuthService>;
